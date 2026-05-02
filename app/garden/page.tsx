@@ -166,12 +166,16 @@ async function recycleFlower(flower: PlayerFlower) {
     `You recycled ${flower.flower_name} into ${seedReward} seeds. The garden accepts the offering.`
   );
 }
-  if (loading) {
-    return <main className="mx-auto max-w-6xl px-5 py-16">Loading garden...</main>;
-  }
+if (loading) {
+  return (
+    <main className="mx-auto max-w-6xl px-5 py-16">
+      Loading garden...
+    </main>
+  );
+}
 
-  if (!profile) {}
-    return (
+  if (!profile) {
+  return (
       <main className="mx-auto max-w-3xl px-5 py-16">
         <div className="rounded-[2rem] border border-white/10 bg-white/10 p-8 text-center backdrop-blur">
           <h1 className="text-4xl font-black">Enter the Garden</h1>
