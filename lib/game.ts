@@ -14,7 +14,12 @@ const FLOWERS: FlowerRoll[] = [
   { name: "Cosmic Pea Flower", rarity: "Epic", emoji: "✨", value: 18 },
   { name: "Golden Pea Bloom", rarity: "Legendary", emoji: "🌟", value: 50 },
   { name: "Cursed Dingle Bloom", rarity: "Mythic", emoji: "🍄", value: 120 }
-];
+];{
+  name: "Cosmic Marble Flower",
+  rarity: "Legendary",
+  emoji: "🌌",
+  value: 250
+}
 
 export function rollFlower(): FlowerRoll {
   const roll = Math.random() * 100;
