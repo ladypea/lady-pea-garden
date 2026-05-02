@@ -21,22 +21,16 @@ type PlayerFlower = {
   value: number;
   created_at: string;
 };
+
 function getRecycleSeeds(rarity: string): number {
   switch (rarity) {
-    case "Common":
-      return 2;
-    case "Uncommon":
-      return 5;
-    case "Rare":
-      return 12;
-    case "Epic":
-      return 30;
-    case "Legendary":
-      return 75;
-    case "Mythic":
-      return 150;
-    default:
-      return 1;
+    case "Common": return 2;
+    case "Uncommon": return 5;
+    case "Rare": return 12;
+    case "Epic": return 30;
+    case "Legendary": return 75;
+    case "Mythic": return 150;
+    default: return 1;
   }
 }
 
@@ -60,7 +54,7 @@ export default function GardenPage() {
     await supabase.from("profiles").upsert({
       id: user.id,
       username: user.user_metadata?.preferred_username || user.user_metadata?.name || "mystery_gardener",
-      avatar_url: user.user_metadata?.avatar_url || null
+      avatar_url: user.user_metadata?.avatar_url || null,
     });
 
     const { data: profileData } = await supabase.from("profiles").select("*").eq("id", user.id).single();
@@ -107,12 +101,12 @@ export default function GardenPage() {
 
   async function plantSeed() {
     if (!profile) return;
-    
+
     if (profile.seeds < PLANT_COST) {
       setMessage(`You need ${PLANT_COST} seeds to plant. The garden demands snacks.`);
       return;
     }
- 
+
     const flower = rollFlower();
     const newSeeds = profile.seeds - PLANT_COST;
 
@@ -125,7 +119,7 @@ export default function GardenPage() {
         flower_name: flower.name,
         rarity: flower.rarity,
         emoji: flower.emoji,
-        value: flower.value
+        value: flower.value,
       })
       .select()
       .single();
@@ -136,46 +130,39 @@ export default function GardenPage() {
       message: `${profile.username} grew a ${flower.rarity} ${flower.name}!`,
       rarity: flower.rarity,
       flower_name: flower.name,
-      emoji: flower.emoji
+      emoji: flower.emoji,
     });
 
     setProfile({ ...profile, seeds: newSeeds });
     setFlowers(inserted ? [inserted, ...flowers] : flowers);
     setMessage(`${flower.emoji} You grew a ${flower.rarity} ${flower.name}!`);
   }
-async function recycleFlower(flower: PlayerFlower) {
-  if (!profile) return;
 
-  const seedReward = getRecycleSeeds(flower.rarity);
-  const newSeeds = profile.seeds + seedReward;
+  async function recycleFlower(flower: PlayerFlower) {
+    if (!profile) return;
 
-  await supabase
-    .from("player_flowers")
-    .delete()
-    .eq("id", flower.id)
-    .eq("user_id", profile.id);
+    const seedReward = getRecycleSeeds(flower.rarity);
+    const newSeeds = profile.seeds + seedReward;
 
-  await supabase
-    .from("profiles")
-    .update({ seeds: newSeeds })
-    .eq("id", profile.id);
+    await supabase
+      .from("player_flowers")
+      .delete()
+      .eq("id", flower.id)
+      .eq("user_id", profile.id);
 
-  setProfile({ ...profile, seeds: newSeeds });
-  setFlowers(flowers.filter((f) => f.id !== flower.id));
-  setMessage(
-    `You recycled ${flower.flower_name} into ${seedReward} seeds. The garden accepts the offering.`
-  );
-  
-if (loading) {
-  return (
-    <main className="mx-auto max-w-6xl px-5 py-16">
-      Loading garden...
-    </main>
-  );
-}
+    await supabase.from("profiles").update({ seeds: newSeeds }).eq("id", profile.id);
+
+    setProfile({ ...profile, seeds: newSeeds });
+    setFlowers(flowers.filter((f) => f.id !== flower.id));
+    setMessage(`You recycled ${flower.flower_name} into ${seedReward} seeds. The garden accepts the offering.`);
+  }
+
+  if (loading) {
+    return <main className="mx-auto max-w-6xl px-5 py-16">Loading garden...</main>;
+  }
 
   if (!profile) {
-  return (
+    return (
       <main className="mx-auto max-w-3xl px-5 py-16">
         <div className="rounded-[2rem] border border-white/10 bg-white/10 p-8 text-center backdrop-blur">
           <h1 className="text-4xl font-black">Enter the Garden</h1>
@@ -184,13 +171,16 @@ if (loading) {
         </div>
       </main>
     );
+  }
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-10">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-4xl font-black">Your Garden</h1>
-          <p className="text-pink-100/70">Seeds: <span className="font-bold text-pink-200">{profile.seeds}</span></p>
+          <p className="text-pink-100/70">
+            Seeds: <span className="font-bold text-pink-200">{profile.seeds}</span>
+          </p>
         </div>
         <AuthButton />
       </div>
@@ -215,22 +205,23 @@ if (loading) {
             <p className="mt-4 text-pink-100/70">No flowers yet. Tiny tragic empty pot energy.</p>
           ) : (
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
-  {flowers.map((flower) => (
-  <div key={flower.id} className="rounded-2xl border border-white/10 bg-black/20 p-4">
-    <div className="text-3xl">{flower.emoji}</div>
-    <div className="mt-2 font-black">{flower.flower_name}</div>
-    <div className="text-sm text-pink-100/70">
-      {flower.rarity} · value {flower.value}
-    </div>
-
-    <button
-      onClick={() => recycleFlower(flower)}
-      className="mt-3 rounded-xl border border-white/20 px-3 py-2 text-sm font-bold text-pink-100 hover:bg-white/10"
-    >
-      Recycle for {getRecycleSeeds(flower.rarity)} seeds
-    </button>
-  </div>
-))}
+              {flowers.map((flower) => (
+                <div key={flower.id} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <div className="text-3xl">{flower.emoji}</div>
+                  <div className="mt-2 font-black">{flower.flower_name}</div>
+                  <div className="text-sm text-pink-100/70">
+                    {flower.rarity} · value {flower.value}
+                  </div>
+                  <button
+                    onClick={() => recycleFlower(flower)}
+                    className="mt-3 rounded-xl border border-white/20 px-3 py-2 text-sm font-bold text-pink-100 hover:bg-white/10"
+                  >
+                    Recycle for {getRecycleSeeds(flower.rarity)} seeds
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
       </div>
     </main>
