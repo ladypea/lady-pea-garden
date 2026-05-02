@@ -14,7 +14,6 @@ const FLOWERS: FlowerRoll[] = [
   { name: "Cosmic Pea Flower", rarity: "Epic", emoji: "✨", value: 18 },
   { name: "Golden Pea Bloom", rarity: "Legendary", emoji: "🌟", value: 50 },
   { name: "Cursed Dingle Bloom", rarity: "Mythic", emoji: "🍄", value: 120 },  { name: "Cosmic Marble Flower",rarity: "Legendary",emoji: "🌌",value: 250},
-
 { name: "Moonlit Pea Blossom", rarity: "Rare", emoji: "🌙", value: 12 },
 { name: "Rainbow Marble Bloom", rarity: "Epic", emoji: "🌈", value: 30 },
 { name: "Starlight Pea Orchid", rarity: "Epic", emoji: "⭐", value: 35 },
