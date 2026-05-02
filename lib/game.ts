@@ -46,6 +46,6 @@ if (roll < 7) return getRandomFlowerByRarity("Epic");         // 5%
 if (roll < 18) return getRandomFlowerByRarity("Rare");        // 11%
 if (roll < 43) return getRandomFlowerByRarity("Uncommon");    // 25%
 return getRandomFlowerByRarity("Common");                     // 57%
-
+}
 export const PLANT_COST = 10;
 export const COLLECT_COOLDOWN_SECONDS = 60;
