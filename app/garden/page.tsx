@@ -170,7 +170,7 @@ async function recycleFlower(flower: PlayerFlower) {
     return <main className="mx-auto max-w-6xl px-5 py-16">Loading garden...</main>;
   }
 
-  if (!profile) {
+  if (!profile) {}
     return (
       <main className="mx-auto max-w-3xl px-5 py-16">
         <div className="rounded-[2rem] border border-white/10 bg-white/10 p-8 text-center backdrop-blur">
