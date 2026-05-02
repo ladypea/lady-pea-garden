@@ -180,7 +180,6 @@ async function recycleFlower(flower: PlayerFlower) {
         </div>
       </main>
     );
-  }
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-10">
