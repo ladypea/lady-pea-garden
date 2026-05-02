@@ -18,7 +18,7 @@ export default function AuthButton() {
     await supabase.auth.signInWithOAuth({
       provider: "twitch",
       options: {
-        redirectTo: redirectTo: "https://lady-pea-garden.vercel.app/garden"
+       redirectTo: "https://lady-pea-garden.vercel.app/garden"
       }
     });
   }
