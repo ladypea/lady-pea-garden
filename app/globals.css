@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(244,114,182,.22), transparent 30%),
+    radial-gradient(circle at 80% 5%, rgba(59,130,246,.18), transparent 35%),
+    linear-gradient(135deg, #050816 0%, #101827 45%, #2a1232 100%);
+  color: white;
+}
+
+button {
+  transition: transform .15s ease, opacity .15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
