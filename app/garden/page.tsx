@@ -21,6 +21,24 @@ type PlayerFlower = {
   value: number;
   created_at: string;
 };
+function getRecycleSeeds(rarity: string): number {
+  switch (rarity) {
+    case "Common":
+      return 2;
+    case "Uncommon":
+      return 5;
+    case "Rare":
+      return 12;
+    case "Epic":
+      return 30;
+    case "Legendary":
+      return 75;
+    case "Mythic":
+      return 150;
+    default:
+      return 1;
+  }
+}
 
 export default function GardenPage() {
   const supabase = getSupabaseClient();
@@ -89,12 +107,12 @@ export default function GardenPage() {
 
   async function plantSeed() {
     if (!profile) return;
-
+    
     if (profile.seeds < PLANT_COST) {
       setMessage(`You need ${PLANT_COST} seeds to plant. The garden demands snacks.`);
       return;
     }
-
+ 
     const flower = rollFlower();
     const newSeeds = profile.seeds - PLANT_COST;
 
@@ -125,7 +143,29 @@ export default function GardenPage() {
     setFlowers(inserted ? [inserted, ...flowers] : flowers);
     setMessage(`${flower.emoji} You grew a ${flower.rarity} ${flower.name}!`);
   }
+async function recycleFlower(flower: PlayerFlower) {
+  if (!profile) return;
 
+  const seedReward = getRecycleSeeds(flower.rarity);
+  const newSeeds = profile.seeds + seedReward;
+
+  await supabase
+    .from("player_flowers")
+    .delete()
+    .eq("id", flower.id)
+    .eq("user_id", profile.id);
+
+  await supabase
+    .from("profiles")
+    .update({ seeds: newSeeds })
+    .eq("id", profile.id);
+
+  setProfile({ ...profile, seeds: newSeeds });
+  setFlowers(flowers.filter((f) => f.id !== flower.id));
+  setMessage(
+    `You recycled ${flower.flower_name} into ${seedReward} seeds. The garden accepts the offering.`
+  );
+}
   if (loading) {
     return <main className="mx-auto max-w-6xl px-5 py-16">Loading garden...</main>;
   }
@@ -172,15 +212,22 @@ export default function GardenPage() {
             <p className="mt-4 text-pink-100/70">No flowers yet. Tiny tragic empty pot energy.</p>
           ) : (
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {flowers.map((flower) => (
-                <div key={flower.id} className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="text-3xl">{flower.emoji}</div>
-                  <div className="mt-2 font-black">{flower.flower_name}</div>
-                  <div className="text-sm text-pink-100/70">{flower.rarity} · value {flower.value}</div>
-                </div>
-              ))}
-            </div>
-          )}
+  {flowers.map((flower) => (
+  <div key={flower.id} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+    <div className="text-3xl">{flower.emoji}</div>
+    <div className="mt-2 font-black">{flower.flower_name}</div>
+    <div className="text-sm text-pink-100/70">
+      {flower.rarity} · value {flower.value}
+    </div>
+
+    <button
+      onClick={() => recycleFlower(flower)}
+      className="mt-3 rounded-xl border border-white/20 px-3 py-2 text-sm font-bold text-pink-100 hover:bg-white/10"
+    >
+      Recycle for {getRecycleSeeds(flower.rarity)} seeds
+    </button>
+  </div>
+))}
         </section>
       </div>
     </main>
