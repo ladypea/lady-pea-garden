@@ -165,7 +165,7 @@ async function recycleFlower(flower: PlayerFlower) {
   setMessage(
     `You recycled ${flower.flower_name} into ${seedReward} seeds. The garden accepts the offering.`
   );
-}
+  
 if (loading) {
   return (
     <main className="mx-auto max-w-6xl px-5 py-16">
