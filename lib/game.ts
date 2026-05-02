@@ -22,30 +22,30 @@ const FLOWERS: FlowerRoll[] = [
 { name: "Void Pea Rose", rarity: "Mythic", emoji: "🖤", value: 180 },
 { name: "Celestial Marble Dahlia", rarity: "Mythic", emoji: "🪐", value: 220 },
 ];
+function getRandomFlowerByRarity(rarity: Rarity): FlowerRoll {
+  const pool = FLOWERS.filter((flower) => flower.rarity === rarity);
+  return pool[Math.floor(Math.random() * pool.length)];
+}
 
 export function rollFlower(): FlowerRoll {
   const roll = Math.random() * 100;
 
-// 🌌 Cosmic Marble mutation (ULTRA RARE)
-if (Math.random() < 0.01) {
-  return {
-    name: "Cosmic Marble Flower",
-    rarity: "Legendary",
-    emoji: "🌌",
-    value: 500
-  };
-}
-function getRandomFlowerByRarity(rarity: Rarity): FlowerRoll {
-  const pool = FLOWERS.filter(f => f.rarity === rarity);
-  return pool[Math.floor(Math.random() * pool.length)];
+  if (Math.random() < 0.01) {
+    return {
+      name: "Cosmic Marble Flower",
+      rarity: "Legendary",
+      emoji: "☄️",
+      value: 500
+    };
+  }
+
+  if (roll < 0.5) return getRandomFlowerByRarity("Mythic");
+  if (roll < 2) return getRandomFlowerByRarity("Legendary");
+  if (roll < 7) return getRandomFlowerByRarity("Epic");
+  if (roll < 18) return getRandomFlowerByRarity("Rare");
+  if (roll < 43) return getRandomFlowerByRarity("Uncommon");
+  return getRandomFlowerByRarity("Common");
 }
 
-if (roll < 0.5) return getRandomFlowerByRarity("Mythic");     // 0.5%
-if (roll < 2) return getRandomFlowerByRarity("Legendary");    // 1.5%
-if (roll < 7) return getRandomFlowerByRarity("Epic");         // 5%
-if (roll < 18) return getRandomFlowerByRarity("Rare");        // 11%
-if (roll < 43) return getRandomFlowerByRarity("Uncommon");    // 25%
-return getRandomFlowerByRarity("Common");                     // 57%
-}
 export const PLANT_COST = 10;
 export const COLLECT_COOLDOWN_SECONDS = 60;
