@@ -33,6 +33,24 @@ function getRecycleSeeds(rarity: string): number {
     default: return 1;
   }
 }
+function getRarityGlow(rarity: string): string {
+  switch (rarity) {
+    case "Common":
+      return "shadow-sm";
+    case "Uncommon":
+      return "shadow-[0_0_14px_rgba(34,197,94,0.35)]";
+    case "Rare":
+      return "shadow-[0_0_16px_rgba(96,165,250,0.45)]";
+    case "Epic":
+      return "shadow-[0_0_18px_rgba(168,85,247,0.5)]";
+    case "Legendary":
+      return "shadow-[0_0_20px_rgba(250,204,21,0.6)]";
+    case "Mythic":
+      return "shadow-[0_0_24px_rgba(236,72,153,0.7)]";
+    default:
+      return "shadow-sm";
+  }
+}
 
 export default function GardenPage() {
   const supabase = getSupabaseClient();
@@ -216,7 +234,7 @@ if (deleteError) {
         <div
           key={flower.id}
           title={`${flower.rarity} ${flower.flower_name}`}
-          className="flex h-20 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-b from-green-900/30 to-black/40 text-3xl transition hover:scale-110"
+          className={`flex h-20 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-b from-green-900/30 to-black/40 text-3xl transition hover:scale-110 ${getRarityGlow(flower.rarity)}`}
         >
           {flower.emoji}
         </div>
