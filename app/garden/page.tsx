@@ -196,7 +196,30 @@ if (deleteError) {
   }
 
   return (
-    <main className="mx-auto max-w-6xl px-5 py-10">
+    <>
+    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+{Array.from({ length: 7 }).map((_, i) => {
+  const icons = ["🦋", "🐝", "🌸", "✨", "🍃", "🌼", "🌷"];
+  const animations = [
+    "butterfly-one",
+    "butterfly-two",
+    "butterfly-three",
+    "butterfly-four",
+    "butterfly-five",
+  ];
+
+  const icon = icons[Math.floor(Math.random() * icons.length)];
+  const animation = animations[i % animations.length];
+
+  return (
+    <span key={i} className={`butterfly ${animation}`}>
+      {icon}
+    </span>
+  );
+})}
+    </div>
+
+    <main className="relative z-10 mx-auto max-w-6xl px-5 py-10">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-4xl font-black">Your Garden</h1>
@@ -269,5 +292,6 @@ if (deleteError) {
         </section>
       </div>
     </main>
+    </>
   );
 }

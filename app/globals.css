@@ -30,3 +30,73 @@ button:disabled {
   opacity: .45;
   cursor: not-allowed;
 }
+.butterfly {
+  position: absolute;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px rgba(244, 114, 182, 0.35));
+}
+
+.butterfly-one {
+  animation: butterflyOne 22s linear infinite;
+}
+
+.butterfly-two {
+  animation: butterflyTwo 28s linear infinite;
+  animation-delay: 6s;
+}
+
+.butterfly-three {
+  animation: butterflyThree 34s linear infinite;
+  animation-delay: 12s;
+}
+
+@keyframes butterflyOne {
+  0% {
+    transform: translate(-10vw, 75vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  45% {
+    transform: translate(45vw, 35vh) rotate(18deg);
+  }
+  100% {
+    transform: translate(110vw, 15vh) rotate(-12deg);
+    opacity: 0;
+  }
+}
+
+@keyframes butterflyTwo {
+  0% {
+    transform: translate(110vw, 60vh) rotate(0deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.6;
+  }
+  55% {
+    transform: translate(40vw, 25vh) rotate(-20deg);
+  }
+  100% {
+    transform: translate(-10vw, 45vh) rotate(14deg);
+    opacity: 0;
+  }
+}
+
+@keyframes butterflyThree {
+  0% {
+    transform: translate(-10vw, 25vh) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.5;
+  }
+  60% {
+    transform: translate(65vw, 70vh) rotate(25deg);
+  }
+  100% {
+    transform: translate(110vw, 50vh) rotate(-18deg);
+    opacity: 0;
+  }
+}
