@@ -202,6 +202,28 @@ if (deleteError) {
             </button>
           </div>
         </section>
+        <section className="rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur">
+  <h2 className="text-2xl font-black">Visual Garden</h2>
+  <p className="mt-2 text-sm text-pink-100/70">
+    Your planted flowers blooming in the patch.
+  </p>
+
+  {flowers.length === 0 ? (
+    <p className="mt-4 text-pink-100/70">Your garden patch is empty.</p>
+  ) : (
+    <div className="mt-5 grid grid-cols-4 gap-4 sm:grid-cols-6">
+      {flowers.slice(0, 24).map((flower) => (
+        <div
+          key={flower.id}
+          title={`${flower.rarity} ${flower.flower_name}`}
+          className="flex h-20 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-b from-green-900/30 to-black/40 text-3xl transition hover:scale-110"
+        >
+          {flower.emoji}
+        </div>
+      ))}
+    </div>
+  )}
+</section>
 
         <section className="rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur">
           <h2 className="text-2xl font-black">Flower Inventory</h2>
