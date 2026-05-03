@@ -144,11 +144,15 @@ export default function GardenPage() {
     const seedReward = getRecycleSeeds(flower.rarity);
     const newSeeds = profile.seeds + seedReward;
 
-    await supabase
-      .from("player_flowers")
-      .delete()
-      .eq("id", flower.id)
-      .eq("user_id", profile.id);
+   const { error: deleteError } = await supabase
+  .from("player_flowers")
+  .delete()
+  .eq("id", flower.id);
+
+if (deleteError) {
+  setMessage(`Could not recycle ${flower.flower_name}. Try again.`);
+  return;
+}
 
     await supabase.from("profiles").update({ seeds: newSeeds }).eq("id", profile.id);
 
