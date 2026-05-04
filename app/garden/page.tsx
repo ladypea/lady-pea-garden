@@ -24,15 +24,23 @@ type PlayerFlower = {
 
 function getRecycleSeeds(rarity: string): number {
   switch (rarity) {
-    case "Common": return 2;
-    case "Uncommon": return 5;
-    case "Rare": return 12;
-    case "Epic": return 30;
-    case "Legendary": return 75;
-    case "Mythic": return 150;
-    default: return 1;
+    case "Common":
+      return 2;
+    case "Uncommon":
+      return 5;
+    case "Rare":
+      return 12;
+    case "Epic":
+      return 30;
+    case "Legendary":
+      return 75;
+    case "Mythic":
+      return 150;
+    default:
+      return 1;
   }
 }
+
 function getRarityGlow(rarity: string): string {
   switch (rarity) {
     case "Common":
@@ -61,6 +69,7 @@ export default function GardenPage() {
 
   async function loadGarden() {
     setLoading(true);
+
     const { data: userData } = await supabase.auth.getUser();
     const user = userData.user;
 
@@ -71,11 +80,19 @@ export default function GardenPage() {
 
     await supabase.from("profiles").upsert({
       id: user.id,
-      username: user.user_metadata?.preferred_username || user.user_metadata?.name || "mystery_gardener",
+      username:
+        user.user_metadata?.preferred_username ||
+        user.user_metadata?.name ||
+        "mystery_gardener",
       avatar_url: user.user_metadata?.avatar_url || null,
     });
 
-    const { data: profileData } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+    const { data: profileData } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
     const { data: flowerData } = await supabase
       .from("player_flowers")
       .select("*")
@@ -100,7 +117,11 @@ export default function GardenPage() {
       const diffSeconds = Math.floor((now - last) / 1000);
 
       if (diffSeconds < COLLECT_COOLDOWN_SECONDS) {
-        setMessage(`The soil is resting. Try again in ${COLLECT_COOLDOWN_SECONDS - diffSeconds}s.`);
+        setMessage(
+          `The soil is resting. Try again in ${
+            COLLECT_COOLDOWN_SECONDS - diffSeconds
+          }s.`
+        );
         return;
       }
     }
@@ -110,11 +131,21 @@ export default function GardenPage() {
 
     await supabase
       .from("profiles")
-      .update({ seeds: newSeeds, last_collected_at: new Date().toISOString() })
+      .update({
+        seeds: newSeeds,
+        last_collected_at: new Date().toISOString(),
+      })
       .eq("id", profile.id);
 
-    setProfile({ ...profile, seeds: newSeeds, last_collected_at: new Date().toISOString() });
-    setMessage(`You found ${amount} seeds hiding in the dirt. Suspiciously generous soil.`);
+    setProfile({
+      ...profile,
+      seeds: newSeeds,
+      last_collected_at: new Date().toISOString(),
+    });
+
+    setMessage(
+      `You found ${amount} seeds hiding in the dirt. Suspiciously generous soil.`
+    );
   }
 
   async function plantSeed() {
@@ -162,25 +193,31 @@ export default function GardenPage() {
     const seedReward = getRecycleSeeds(flower.rarity);
     const newSeeds = profile.seeds + seedReward;
 
-   const { error: deleteError } = await supabase
-  .from("player_flowers")
-  .delete()
-  .eq("id", flower.id);
+    const { error: deleteError } = await supabase
+      .from("player_flowers")
+      .delete()
+      .eq("id", flower.id);
 
-if (deleteError) {
-  setMessage(`Could not recycle ${flower.flower_name}. Try again.`);
-  return;
-}
+    if (deleteError) {
+      setMessage(`Could not recycle ${flower.flower_name}. Try again.`);
+      return;
+    }
 
     await supabase.from("profiles").update({ seeds: newSeeds }).eq("id", profile.id);
 
     setProfile({ ...profile, seeds: newSeeds });
     setFlowers(flowers.filter((f) => f.id !== flower.id));
-    setMessage(`You recycled ${flower.flower_name} into ${seedReward} seeds. The garden accepts the offering.`);
+    setMessage(
+      `You recycled ${flower.flower_name} into ${seedReward} seeds. The garden accepts the offering.`
+    );
   }
 
   if (loading) {
-    return <main className="mx-auto max-w-6xl px-5 py-16">Loading garden...</main>;
+    return (
+      <main className="mx-auto max-w-6xl px-5 py-16">
+        Loading garden...
+      </main>
+    );
   }
 
   if (!profile) {
@@ -188,7 +225,9 @@ if (deleteError) {
       <main className="mx-auto max-w-3xl px-5 py-16">
         <div className="rounded-[2rem] border border-white/10 bg-white/10 p-8 text-center backdrop-blur">
           <h1 className="text-4xl font-black">Enter the Garden</h1>
-          <p className="mb-6 mt-3 text-pink-100/80">Login with Twitch to collect seeds and grow flowers.</p>
+          <p className="mb-6 mt-3 text-pink-100/80">
+            Login with Twitch to collect seeds and grow flowers.
+          </p>
           <AuthButton />
         </div>
       </main>
@@ -197,101 +236,124 @@ if (deleteError) {
 
   return (
     <>
-    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-{Array.from({ length: 7 }).map((_, i) => {
-  const icons = ["🦋", "🐝", "🌸", "✨", "🍃", "🌼", "🌷"];
-  const animations = [
-    "butterfly-one",
-    "butterfly-two",
-    "butterfly-three",
-    "butterfly-four",
-    "butterfly-five",
-  ];
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        {Array.from({ length: 7 }).map((_, i) => {
+          const icons = ["🦋", "🐝", "🌸", "✨", "🍃", "🌼", "🌷"];
+          const animations = [
+            "butterfly-one",
+            "butterfly-two",
+            "butterfly-three",
+            "butterfly-four",
+            "butterfly-five",
+          ];
 
-  const icon = icons[Math.floor(Math.random() * icons.length)];
-  const animation = animations[i % animations.length];
+          const icon = icons[Math.floor(Math.random() * icons.length)];
+          const animation = animations[i % animations.length];
 
-  return (
-    <span key={i} className={`butterfly ${animation}`}>
-      {icon}
-    </span>
-  );
-})}
-    </div>
-
-    <main className="relative z-10 mx-auto max-w-6xl px-5 py-10">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-4xl font-black">Your Garden</h1>
-          <p className="text-pink-100/70">
-            Seeds: <span className="font-bold text-pink-200">{profile.seeds}</span>
-          </p>
-        </div>
-        <AuthButton />
+          return (
+            <span key={i} className={`butterfly ${animation}`}>
+              {icon}
+            </span>
+          );
+        })}
       </div>
 
-      <div className="grid gap-5 md:grid-cols-[1fr_1.5fr]">
-        <section className="rounded-[2rem] border border-white/10 bg-white/10 p-6 shadow-glow backdrop-blur">
-          <h2 className="text-2xl font-black">Garden Actions</h2>
-          <p className="mt-2 min-h-12 text-pink-100/80">{message}</p>
-          <div className="mt-6 flex flex-col gap-3">
-            <button onClick={collectSeeds} className="rounded-2xl bg-pink-400 px-5 py-4 font-black text-slate-950">
-              Collect Seeds
-            </button>
-            <button onClick={plantSeed} className="rounded-2xl bg-blue-300 px-5 py-4 font-black text-slate-950">
-              Plant Seed ({PLANT_COST} seeds)
-            </button>
+      <main className="relative z-10 mx-auto max-w-6xl px-5 py-10">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-black">Your Garden</h1>
+            <p className="text-pink-100/70">
+              Seeds:{" "}
+              <span className="font-bold text-pink-200">{profile.seeds}</span>
+            </p>
           </div>
-        </section>
-        <section className="rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur">
-  <h2 className="text-2xl font-black">Visual Garden</h2>
-  <p className="mt-2 text-sm text-pink-100/70">
-    Your planted flowers blooming in the patch.
-  </p>
-
-  {flowers.length === 0 ? (
-    <p className="mt-4 text-pink-100/70">Your garden patch is empty.</p>
-  ) : (
-    <div className="mt-5 grid grid-cols-4 gap-4 sm:grid-cols-6">
-      {flowers.slice(0, 24).map((flower) => (
-        <div
-          key={flower.id}
-          title={`${flower.rarity} ${flower.flower_name}`}
-          className={`flex h-20 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-b from-green-900/30 to-black/40 text-3xl transition hover:scale-110 ${getRarityGlow(flower.rarity)}`}
-        >
-          {flower.emoji}
+          <AuthButton />
         </div>
-      ))}
-    </div>
-  )}
-</section>
 
-        <section className="rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur">
-          <h2 className="text-2xl font-black">Flower Inventory</h2>
-          {flowers.length === 0 ? (
-            <p className="mt-4 text-pink-100/70">No flowers yet. Tiny tragic empty pot energy.</p>
-          ) : (
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {flowers.map((flower) => (
-                <div key={flower.id} className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="text-3xl">{flower.emoji}</div>
-                  <div className="mt-2 font-black">{flower.flower_name}</div>
-                  <div className="text-sm text-pink-100/70">
-                    {flower.rarity} · value {flower.value}
-                  </div>
-                  <button
-                    onClick={() => recycleFlower(flower)}
-                    className="mt-3 rounded-xl border border-white/20 px-3 py-2 text-sm font-bold text-pink-100 hover:bg-white/10"
+        <div className="space-y-5">
+          <section className="rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur">
+            <h2 className="text-2xl font-black">Visual Garden</h2>
+            <p className="mt-2 text-sm text-pink-100/70">
+              Your planted flowers blooming in the patch.
+            </p>
+
+            {flowers.length === 0 ? (
+              <p className="mt-4 text-pink-100/70">
+                Your garden patch is empty.
+              </p>
+            ) : (
+              <div className="mt-5 grid grid-cols-4 gap-4 sm:grid-cols-6">
+                {flowers.slice(0, 24).map((flower) => (
+                  <div
+                    key={flower.id}
+                    title={`${flower.rarity} ${flower.flower_name}`}
+                    className={`flex h-20 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-b from-green-900/30 to-black/40 text-3xl transition hover:scale-110 ${getRarityGlow(
+                      flower.rarity
+                    )}`}
                   >
-                    Recycle for {getRecycleSeeds(flower.rarity)} seeds
-                  </button>
+                    {flower.emoji}
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          <div className="grid gap-5 md:grid-cols-[1fr_1.5fr]">
+            <section className="rounded-[2rem] border border-white/10 bg-white/10 p-6 shadow-glow backdrop-blur">
+              <h2 className="text-2xl font-black">Garden Actions</h2>
+              <p className="mt-2 min-h-12 text-pink-100/80">{message}</p>
+
+              <div className="mt-6 flex flex-col gap-3">
+                <button
+                  onClick={collectSeeds}
+                  className="rounded-2xl bg-pink-400 px-5 py-4 font-black text-slate-950"
+                >
+                  Collect Seeds
+                </button>
+
+                <button
+                  onClick={plantSeed}
+                  className="rounded-2xl bg-blue-300 px-5 py-4 font-black text-slate-950"
+                >
+                  Plant Seed ({PLANT_COST} seeds)
+                </button>
+              </div>
+            </section>
+
+            <section className="rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur">
+              <h2 className="text-2xl font-black">Flower Inventory</h2>
+
+              {flowers.length === 0 ? (
+                <p className="mt-4 text-pink-100/70">
+                  No flowers yet. Tiny tragic empty pot energy.
+                </p>
+              ) : (
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {flowers.map((flower) => (
+                    <div
+                      key={flower.id}
+                      className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                    >
+                      <div className="text-3xl">{flower.emoji}</div>
+                      <div className="mt-2 font-black">{flower.flower_name}</div>
+                      <div className="text-sm text-pink-100/70">
+                        {flower.rarity} · value {flower.value}
+                      </div>
+
+                      <button
+                        onClick={() => recycleFlower(flower)}
+                        className="mt-3 rounded-xl border border-white/20 px-3 py-2 text-sm font-bold text-pink-100 hover:bg-white/10"
+                      >
+                        Recycle for {getRecycleSeeds(flower.rarity)} seeds
+                      </button>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
-        </section>
-      </div>
-    </main>
+              )}
+            </section>
+          </div>
+        </div>
+      </main>
     </>
   );
 }
