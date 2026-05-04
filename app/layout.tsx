@@ -17,7 +17,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/garden">Garden</Link>
             <Link href="/leaderboard">Leaderboard</Link>
             <Link href="/overlay">Overlay</Link>
-            <Link href="/admin">Admin</Link>
           </div>
         </nav>
         {children}
