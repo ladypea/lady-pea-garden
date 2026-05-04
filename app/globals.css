@@ -2,15 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 🌿 BACKGROUND */
 body {
   background:
-    linear-gradient(rgba(10,10,20,0.6), rgba(10,10,20,0.85)),
+    linear-gradient(rgba(10, 10, 20, 0.55), rgba(10, 10, 20, 0.85)),
     url("/garden-bg.png") center / cover no-repeat fixed;
   color: white;
 }
 
-/* 🦋 FLOATING ICONS */
+/* Floating background icons */
 .butterfly {
   position: fixed;
   font-size: 3rem;
@@ -20,21 +19,48 @@ body {
   animation: floatAround 18s ease-in-out infinite alternate;
 }
 
-/* 🌸 RANDOM FLOAT MOTION */
 @keyframes floatAround {
   0% {
-    transform: translate(0px, 0px) rotate(0deg);
+    transform: translate(0, 0) rotate(0deg);
   }
-  25% {
-    transform: translate(40px, -60px) rotate(10deg);
-  }
+
   50% {
-    transform: translate(-30px, 40px) rotate(-8deg);
+    transform: translate(35px, -45px) rotate(12deg);
   }
-  75% {
-    transform: translate(60px, 20px) rotate(12deg);
-  }
+
   100% {
-    transform: translate(-40px, -50px) rotate(-10deg);
+    transform: translate(-30px, 35px) rotate(-10deg);
+  }
+}
+
+/* Planting burst */
+.plant-burst {
+  position: absolute;
+  font-size: 2.5rem;
+  animation: plantBurst 900ms ease-out forwards;
+}
+
+.plant-burst-two {
+  animation-delay: 80ms;
+}
+
+.plant-burst-three {
+  animation-delay: 140ms;
+}
+
+@keyframes plantBurst {
+  0% {
+    transform: scale(0.4) translate(0, 0);
+    opacity: 1;
+  }
+
+  60% {
+    transform: scale(1.4) translate(0, -80px);
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: scale(0.8) translate(0, -140px);
+    opacity: 0;
   }
 }
