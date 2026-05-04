@@ -5,32 +5,42 @@ import { getSupabaseClient } from "@/lib/supabaseClient";
 
 export default function AuthButton() {
   const supabase = getSupabaseClient();
-  const [emailOrName, setEmailOrName] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      const user = data.user;
-      setEmailOrName(user?.user_metadata?.preferred_username || user?.user_metadata?.name || "Gardener");
+      setUser(data.user);
     });
-  }, [supabase]);
 
-  async function signIn() {
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  async function login() {
     await supabase.auth.signInWithOAuth({
       provider: "twitch",
       options: {
-       redirectTo: "https://lady-pea-garden.vercel.app/garden"
-      }
+        redirectTo: `${window.location.origin}/garden`,
+      },
     });
   }
 
-  async function signOut() {
+  async function logout() {
     await supabase.auth.signOut();
     window.location.reload();
   }
 
-  if (!emailOrName) {
+  if (!user) {
     return (
-      <button onClick={signIn} className="rounded-full bg-purple-400 px-5 py-2 font-bold text-slate-950">
+      <button
+        onClick={login}
+        className="rounded-xl bg-purple-500 px-4 py-2 font-bold text-white"
+      >
         Login with Twitch
       </button>
     );
@@ -38,8 +48,14 @@ export default function AuthButton() {
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm text-pink-100">Logged in 🌱</span>
-      <button onClick={signOut} className="rounded-full border border-white/20 px-4 py-2 text-sm">
+      <span className="text-sm text-white/80">
+        Logged in 🌱
+      </span>
+
+      <button
+        onClick={logout}
+        className="rounded-xl bg-red-500 px-3 py-1 text-white"
+      >
         Logout
       </button>
     </div>
