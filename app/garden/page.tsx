@@ -24,40 +24,41 @@ type PlayerFlower = {
 
 function getRecycleSeeds(rarity: string): number {
   switch (rarity) {
-    case "Common":
-      return 2;
-    case "Uncommon":
-      return 5;
-    case "Rare":
-      return 12;
-    case "Epic":
-      return 30;
-    case "Legendary":
-      return 75;
-    case "Mythic":
-      return 150;
-    default:
-      return 1;
+    case "Common": return 2;
+    case "Uncommon": return 5;
+    case "Rare": return 12;
+    case "Epic": return 30;
+    case "Legendary": return 75;
+    case "Mythic": return 150;
+    default: return 1;
   }
 }
 
 function getRarityGlow(rarity: string): string {
   switch (rarity) {
-    case "Common":
-      return "shadow-sm";
-    case "Uncommon":
-      return "shadow-[0_0_14px_rgba(34,197,94,0.35)]";
-    case "Rare":
-      return "shadow-[0_0_16px_rgba(96,165,250,0.45)]";
-    case "Epic":
-      return "shadow-[0_0_18px_rgba(168,85,247,0.5)]";
-    case "Legendary":
-      return "shadow-[0_0_20px_rgba(250,204,21,0.6)]";
-    case "Mythic":
-      return "shadow-[0_0_24px_rgba(236,72,153,0.7)]";
-    default:
-      return "shadow-sm";
+    case "Uncommon": return "shadow-[0_0_14px_rgba(34,197,94,0.35)]";
+    case "Rare": return "shadow-[0_0_16px_rgba(96,165,250,0.45)]";
+    case "Epic": return "shadow-[0_0_18px_rgba(168,85,247,0.5)]";
+    case "Legendary": return "shadow-[0_0_20px_rgba(250,204,21,0.6)]";
+    case "Mythic": return "shadow-[0_0_24px_rgba(236,72,153,0.7)]";
+    default: return "shadow-sm";
   }
+}
+
+function getMessageStyle(message: string): string {
+  if (message.includes("Mythic") || message.includes("Cosmic Marble Flower")) {
+    return "border-pink-300/60 bg-pink-500/20 shadow-[0_0_30px_rgba(236,72,153,0.6)]";
+  }
+  if (message.includes("Legendary")) {
+    return "border-yellow-300/60 bg-yellow-500/20 shadow-[0_0_28px_rgba(250,204,21,0.55)]";
+  }
+  if (message.includes("Epic")) {
+    return "border-purple-300/60 bg-purple-500/20 shadow-[0_0_24px_rgba(168,85,247,0.5)]";
+  }
+  if (message.includes("Rare")) {
+    return "border-blue-300/60 bg-blue-500/20 shadow-[0_0_20px_rgba(96,165,250,0.45)]";
+  }
+  return "border-white/10 bg-black/20";
 }
 
 export default function GardenPage() {
@@ -66,6 +67,7 @@ export default function GardenPage() {
   const [flowers, setFlowers] = useState<PlayerFlower[]>([]);
   const [message, setMessage] = useState("Welcome to the garden.");
   const [loading, setLoading] = useState(true);
+  const [burst, setBurst] = useState(false);
 
   async function loadGarden() {
     setLoading(true);
@@ -117,11 +119,7 @@ export default function GardenPage() {
       const diffSeconds = Math.floor((now - last) / 1000);
 
       if (diffSeconds < COLLECT_COOLDOWN_SECONDS) {
-        setMessage(
-          `The soil is resting. Try again in ${
-            COLLECT_COOLDOWN_SECONDS - diffSeconds
-          }s.`
-        );
+        setMessage(`The soil is resting. Try again in ${COLLECT_COOLDOWN_SECONDS - diffSeconds}s.`);
         return;
       }
     }
@@ -143,9 +141,7 @@ export default function GardenPage() {
       last_collected_at: new Date().toISOString(),
     });
 
-    setMessage(
-      `You found ${amount} seeds hiding in the dirt. Suspiciously generous soil.`
-    );
+    setMessage(`You found ${amount} seeds hiding in the dirt. Suspiciously generous soil.`);
   }
 
   async function plantSeed() {
@@ -184,7 +180,15 @@ export default function GardenPage() {
 
     setProfile({ ...profile, seeds: newSeeds });
     setFlowers(inserted ? [inserted, ...flowers] : flowers);
-    setMessage(`${flower.emoji} You grew a ${flower.rarity} ${flower.name}!`);
+
+    setBurst(true);
+    setTimeout(() => setBurst(false), 900);
+
+    if (flower.name === "Cosmic Marble Flower") {
+      setMessage(`🌌 COSMIC MARBLE FLOWER! The whole garden starts glowing!`);
+    } else {
+      setMessage(`${flower.emoji} You grew a ${flower.rarity} ${flower.name}!`);
+    }
   }
 
   async function recycleFlower(flower: PlayerFlower) {
@@ -207,17 +211,11 @@ export default function GardenPage() {
 
     setProfile({ ...profile, seeds: newSeeds });
     setFlowers(flowers.filter((f) => f.id !== flower.id));
-    setMessage(
-      `You recycled ${flower.flower_name} into ${seedReward} seeds. The garden accepts the offering.`
-    );
+    setMessage(`You recycled ${flower.flower_name} into ${seedReward} seeds. The garden accepts the offering.`);
   }
 
   if (loading) {
-    return (
-      <main className="mx-auto max-w-6xl px-5 py-16">
-        Loading garden...
-      </main>
-    );
+    return <main className="mx-auto max-w-6xl px-5 py-16">Loading garden...</main>;
   }
 
   if (!profile) {
@@ -237,7 +235,7 @@ export default function GardenPage() {
   return (
     <>
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        {Array.from({ length: 15 }).map((_, i) => {
+        {Array.from({ length: 14 }).map((_, i) => {
           const icons = ["🦋", "🐝", "🌸", "✨", "🍃", "🌼", "🌷"];
           const animations = [
             "butterfly-one",
@@ -258,13 +256,20 @@ export default function GardenPage() {
         })}
       </div>
 
+      {burst && (
+        <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center">
+          <div className="plant-burst">✨</div>
+          <div className="plant-burst plant-burst-two">🌸</div>
+          <div className="plant-burst plant-burst-three">🌱</div>
+        </div>
+      )}
+
       <main className="relative z-10 mx-auto max-w-6xl px-5 py-10">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-4xl font-black">Your Garden</h1>
             <p className="text-pink-100/70">
-              Seeds:{" "}
-              <span className="font-bold text-pink-200">{profile.seeds}</span>
+              Seeds: <span className="font-bold text-pink-200">{profile.seeds}</span>
             </p>
           </div>
           <AuthButton />
@@ -278,9 +283,7 @@ export default function GardenPage() {
             </p>
 
             {flowers.length === 0 ? (
-              <p className="mt-4 text-pink-100/70">
-                Your garden patch is empty.
-              </p>
+              <p className="mt-4 text-pink-100/70">Your garden patch is empty.</p>
             ) : (
               <div className="mt-5 grid grid-cols-4 gap-4 sm:grid-cols-6">
                 {flowers.slice(0, 24).map((flower) => (
@@ -301,7 +304,14 @@ export default function GardenPage() {
           <div className="grid gap-5 md:grid-cols-[1fr_1.5fr]">
             <section className="rounded-[2rem] border border-white/10 bg-white/10 p-6 shadow-glow backdrop-blur">
               <h2 className="text-2xl font-black">Garden Actions</h2>
-              <p className="mt-2 min-h-12 text-pink-100/80">{message}</p>
+
+              <div
+                className={`mt-4 min-h-14 rounded-2xl border p-4 text-pink-50 transition-all ${getMessageStyle(
+                  message
+                )}`}
+              >
+                {message}
+              </div>
 
               <div className="mt-6 flex flex-col gap-3">
                 <button
