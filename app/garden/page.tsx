@@ -36,29 +36,29 @@ function getRecycleSeeds(rarity: string): number {
 
 function getRarityGlow(rarity: string): string {
   switch (rarity) {
-    case "Uncommon": return "shadow-[0_0_14px_rgba(34,197,94,0.35)]";
-    case "Rare": return "shadow-[0_0_16px_rgba(96,165,250,0.45)]";
-    case "Epic": return "shadow-[0_0_18px_rgba(168,85,247,0.5)]";
-    case "Legendary": return "shadow-[0_0_20px_rgba(250,204,21,0.6)]";
-    case "Mythic": return "shadow-[0_0_24px_rgba(236,72,153,0.7)]";
+    case "Uncommon": return "shadow-[0_0_18px_rgba(34,197,94,0.45)]";
+    case "Rare": return "shadow-[0_0_20px_rgba(96,165,250,0.55)]";
+    case "Epic": return "shadow-[0_0_24px_rgba(168,85,247,0.6)]";
+    case "Legendary": return "shadow-[0_0_28px_rgba(250,204,21,0.75)]";
+    case "Mythic": return "shadow-[0_0_34px_rgba(236,72,153,0.85)]";
     default: return "shadow-sm";
   }
 }
 
 function getMessageStyle(message: string): string {
   if (message.includes("Mythic") || message.includes("Cosmic Marble Flower")) {
-    return "border-pink-300/60 bg-pink-500/20 shadow-[0_0_30px_rgba(236,72,153,0.6)]";
+    return "border-pink-300/60 bg-pink-500/20 shadow-[0_0_35px_rgba(236,72,153,0.7)]";
   }
   if (message.includes("Legendary")) {
-    return "border-yellow-300/60 bg-yellow-500/20 shadow-[0_0_28px_rgba(250,204,21,0.55)]";
+    return "border-yellow-300/60 bg-yellow-500/20 shadow-[0_0_32px_rgba(250,204,21,0.65)]";
   }
   if (message.includes("Epic")) {
-    return "border-purple-300/60 bg-purple-500/20 shadow-[0_0_24px_rgba(168,85,247,0.5)]";
+    return "border-purple-300/60 bg-purple-500/20 shadow-[0_0_28px_rgba(168,85,247,0.55)]";
   }
   if (message.includes("Rare")) {
-    return "border-blue-300/60 bg-blue-500/20 shadow-[0_0_20px_rgba(96,165,250,0.45)]";
+    return "border-blue-300/60 bg-blue-500/20 shadow-[0_0_24px_rgba(96,165,250,0.5)]";
   }
-  return "border-white/10 bg-black/20";
+  return "border-white/10 bg-black/30";
 }
 
 export default function GardenPage() {
@@ -185,7 +185,7 @@ export default function GardenPage() {
     setTimeout(() => setBurst(false), 900);
 
     if (flower.name === "Cosmic Marble Flower") {
-      setMessage(`🌌 COSMIC MARBLE FLOWER! The whole garden starts glowing!`);
+      setMessage("🌌 COSMIC MARBLE FLOWER! The whole garden starts glowing!");
     } else {
       setMessage(`${flower.emoji} You grew a ${flower.rarity} ${flower.name}!`);
     }
@@ -221,7 +221,7 @@ export default function GardenPage() {
   if (!profile) {
     return (
       <main className="mx-auto max-w-3xl px-5 py-16">
-        <div className="rounded-[2rem] border border-white/10 bg-white/10 p-8 text-center backdrop-blur">
+        <div className="rounded-[2rem] border border-white/10 bg-black/50 p-8 text-center shadow-[0_0_40px_rgba(236,72,153,0.2)] backdrop-blur-xl">
           <h1 className="text-4xl font-black">Enter the Garden</h1>
           <p className="mb-6 mt-3 text-pink-100/80">
             Login with Twitch to collect seeds and grow flowers.
@@ -265,10 +265,10 @@ export default function GardenPage() {
       )}
 
       <main className="relative z-10 mx-auto max-w-6xl px-5 py-10">
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-[2rem] border border-white/10 bg-black/35 p-5 shadow-[0_0_40px_rgba(236,72,153,0.16)] backdrop-blur-xl">
           <div>
-            <h1 className="text-4xl font-black">Your Garden</h1>
-            <p className="text-pink-100/70">
+            <h1 className="text-4xl font-black text-white">Your Garden</h1>
+            <p className="text-pink-100/80">
               Seeds: <span className="font-bold text-pink-200">{profile.seeds}</span>
             </p>
           </div>
@@ -276,9 +276,9 @@ export default function GardenPage() {
         </div>
 
         <div className="space-y-5">
-          <section className="rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur">
-            <h2 className="text-2xl font-black">Visual Garden</h2>
-            <p className="mt-2 text-sm text-pink-100/70">
+          <section className="rounded-[2rem] border border-white/10 bg-black/45 p-6 shadow-[0_0_40px_rgba(236,72,153,0.15)] backdrop-blur-xl">
+            <h2 className="text-2xl font-black text-white">Visual Garden</h2>
+            <p className="mt-2 text-sm text-pink-100/75">
               Your planted flowers blooming in the patch.
             </p>
 
@@ -290,7 +290,7 @@ export default function GardenPage() {
                   <div
                     key={flower.id}
                     title={`${flower.rarity} ${flower.flower_name}`}
-                    className={`flex h-20 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-b from-green-900/30 to-black/40 text-3xl transition hover:scale-110 ${getRarityGlow(
+                    className={`flex h-20 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-b from-green-900/30 to-black/60 text-3xl transition hover:scale-110 ${getRarityGlow(
                       flower.rarity
                     )}`}
                   >
@@ -302,8 +302,8 @@ export default function GardenPage() {
           </section>
 
           <div className="grid gap-5 md:grid-cols-[1fr_1.5fr]">
-            <section className="rounded-[2rem] border border-white/10 bg-white/10 p-6 shadow-glow backdrop-blur">
-              <h2 className="text-2xl font-black">Garden Actions</h2>
+            <section className="rounded-[2rem] border border-white/10 bg-black/45 p-6 shadow-[0_0_40px_rgba(236,72,153,0.15)] backdrop-blur-xl">
+              <h2 className="text-2xl font-black text-white">Garden Actions</h2>
 
               <div
                 className={`mt-4 min-h-14 rounded-2xl border p-4 text-pink-50 transition-all ${getMessageStyle(
@@ -316,22 +316,22 @@ export default function GardenPage() {
               <div className="mt-6 flex flex-col gap-3">
                 <button
                   onClick={collectSeeds}
-                  className="rounded-2xl bg-pink-400 px-5 py-4 font-black text-slate-950"
+                  className="rounded-2xl bg-pink-400 px-5 py-4 font-black text-slate-950 shadow-[0_0_20px_rgba(236,72,153,0.35)] transition hover:scale-[1.02]"
                 >
                   Collect Seeds
                 </button>
 
                 <button
                   onClick={plantSeed}
-                  className="rounded-2xl bg-blue-300 px-5 py-4 font-black text-slate-950"
+                  className="rounded-2xl bg-blue-300 px-5 py-4 font-black text-slate-950 shadow-[0_0_20px_rgba(96,165,250,0.3)] transition hover:scale-[1.02]"
                 >
                   Plant Seed ({PLANT_COST} seeds)
                 </button>
               </div>
             </section>
 
-            <section className="rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur">
-              <h2 className="text-2xl font-black">Flower Inventory</h2>
+            <section className="rounded-[2rem] border border-white/10 bg-black/45 p-6 shadow-[0_0_40px_rgba(236,72,153,0.15)] backdrop-blur-xl">
+              <h2 className="text-2xl font-black text-white">Flower Inventory</h2>
 
               {flowers.length === 0 ? (
                 <p className="mt-4 text-pink-100/70">
@@ -342,17 +342,17 @@ export default function GardenPage() {
                   {flowers.map((flower) => (
                     <div
                       key={flower.id}
-                      className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                      className="rounded-2xl border border-white/10 bg-black/40 p-4 shadow-[0_0_18px_rgba(0,0,0,0.35)]"
                     >
                       <div className="text-3xl">{flower.emoji}</div>
-                      <div className="mt-2 font-black">{flower.flower_name}</div>
+                      <div className="mt-2 font-black text-white">{flower.flower_name}</div>
                       <div className="text-sm text-pink-100/70">
                         {flower.rarity} · value {flower.value}
                       </div>
 
                       <button
                         onClick={() => recycleFlower(flower)}
-                        className="mt-3 rounded-xl border border-white/20 px-3 py-2 text-sm font-bold text-pink-100 hover:bg-white/10"
+                        className="mt-3 rounded-xl border border-white/20 px-3 py-2 text-sm font-bold text-pink-100 transition hover:bg-white/10"
                       >
                         Recycle for {getRecycleSeeds(flower.rarity)} seeds
                       </button>

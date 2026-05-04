@@ -2,124 +2,94 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
-}
-
-html, body {
-  min-height: 100%;
-}
-
+/* 🌿 Garden Background */
 body {
-  background:
-    radial-gradient(circle at 20% 20%, rgba(244,114,182,.22), transparent 30%),
-    radial-gradient(circle at 80% 5%, rgba(59,130,246,.18), transparent 35%),
-    linear-gradient(135deg, #050816 0%, #101827 45%, #2a1232 100%);
+  background-image: url("/garden-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  /* dark overlay so UI is readable */
+  background-color: rgba(10, 10, 20, 0.65);
+  background-blend-mode: overlay;
+
   color: white;
 }
 
-button {
-  transition: transform .15s ease, opacity .15s ease;
-}
-
-button:hover {
-  transform: translateY(-1px);
-}
-
-button:disabled {
-  opacity: .45;
-  cursor: not-allowed;
-}
+/* 🦋 Floating icons */
 .butterfly {
   position: absolute;
   font-size: 2.5rem;
-  opacity: 0;
-  filter: drop-shadow(0 0 10px rgba(223, 42, 135, 0.621));
+  opacity: 0.8;
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px rgba(244, 114, 182, 0.35));
 }
 
-.butterfly-one {
-  animation: butterflyOne 22s linear infinite;
+.butterfly-one { animation: floatOne 18s linear infinite; }
+.butterfly-two { animation: floatTwo 22s linear infinite; }
+.butterfly-three { animation: floatThree 20s linear infinite; }
+.butterfly-four { animation: floatFour 25s linear infinite; }
+.butterfly-five { animation: floatFive 19s linear infinite; }
+
+/* 🌸 Float animations */
+@keyframes floatOne {
+  0% { transform: translateY(100vh) translateX(0); }
+  100% { transform: translateY(-120vh) translateX(40px); }
 }
 
-.butterfly-two {
-  animation: butterflyTwo 28s linear infinite;
-  animation-delay: 6s;
+@keyframes floatTwo {
+  0% { transform: translateY(110vh) translateX(40px); }
+  100% { transform: translateY(-110vh) translateX(-60px); }
 }
 
-.butterfly-three {
-  animation: butterflyThree 34s linear infinite;
-  animation-delay: 12s;
+@keyframes floatThree {
+  0% { transform: translateY(105vh) translateX(-20px); }
+  100% { transform: translateY(-115vh) translateX(60px); }
 }
 
-@keyframes butterflyOne {
+@keyframes floatFour {
+  0% { transform: translateY(120vh) translateX(60px); }
+  100% { transform: translateY(-100vh) translateX(-40px); }
+}
+
+@keyframes floatFive {
+  0% { transform: translateY(115vh) translateX(-40px); }
+  100% { transform: translateY(-120vh) translateX(20px); }
+}
+
+/* ✨ Plant burst animation */
+.plant-burst {
+  position: absolute;
+  font-size: 2.5rem;
+  animation: plantBurst 900ms ease-out forwards;
+}
+
+.plant-burst-two {
+  animation-delay: 80ms;
+}
+
+.plant-burst-three {
+  animation-delay: 140ms;
+}
+
+@keyframes plantBurst {
   0% {
-    transform: translate(-10vw, 75vh) rotate(0deg);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.8;
-  }
-  45% {
-    transform: translate(45vw, 35vh) rotate(18deg);
-  }
-  100% {
-    transform: translate(110vw, 15vh) rotate(-12deg);
-    opacity: 0;
-  }
-}
-
-@keyframes butterflyTwo {
-  0% {
-    transform: translate(110vw, 60vh) rotate(0deg);
-    opacity: 0;
-  }
-  12% {
-    opacity: 0.6;
-  }
-  55% {
-    transform: translate(40vw, 25vh) rotate(-20deg);
-  }
-  100% {
-    transform: translate(-10vw, 45vh) rotate(14deg);
-    opacity: 0;
-  }
-}
-
-@keyframes butterflyThree {
-  0% {
-    transform: translate(-10vw, 25vh) rotate(0deg);
-    opacity: 0;
-  }
-  15% {
-    opacity: 0.5;
+    transform: scale(0.4) translate(0, 0);
+    opacity: 1;
   }
   60% {
-    transform: translate(65vw, 70vh) rotate(25deg);
+    transform: scale(1.4) translate(0, -80px);
+    opacity: 0.9;
   }
   100% {
-    transform: translate(110vw, 50vh) rotate(-18deg);
+    transform: scale(0.8) translate(0, -140px);
     opacity: 0;
   }
-}.butterfly-four {
-  animation: butterflyFour 26s linear infinite;
-  animation-delay: 4s;
 }
-
-.butterfly-five {
-  animation: butterflyFive 30s linear infinite;
-  animation-delay: 10s;
-}
-
-@keyframes butterflyFour {
-  0% { transform: translate(-10vw, 90vh) rotate(0deg); opacity: 0; }
-  15% { opacity: 0.7; }
-  60% { transform: translate(60vw, 20vh) rotate(30deg); }
-  100% { transform: translate(110vw, 60vh) rotate(-20deg); opacity: 0; }
-}
-
-@keyframes butterflyFive {
-  0% { transform: translate(110vw, 10vh) rotate(0deg); opacity: 0; }
-  10% { opacity: 0.6; }
-  50% { transform: translate(30vw, 70vh) rotate(-25deg); }
-  100% { transform: translate(-10vw, 40vh) rotate(15deg); opacity: 0; }
+body {
+  background:
+    linear-gradient(rgba(10, 10, 20, 0.55), rgba(10, 10, 20, 0.85)),
+    url("/garden-bg.png") center / cover no-repeat fixed;
+  color: white;
 }
