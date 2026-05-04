@@ -237,7 +237,7 @@ export default function GardenPage() {
   return (
     <>
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        {Array.from({ length: 7 }).map((_, i) => {
+        {Array.from({ length: 15 }).map((_, i) => {
           const icons = ["🦋", "🐝", "🌸", "✨", "🍃", "🌼", "🌷"];
           const animations = [
             "butterfly-one",
