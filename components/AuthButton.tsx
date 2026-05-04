@@ -10,7 +10,7 @@ export default function AuthButton() {
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       const user = data.user;
-      setEmailOrName(user?.user_metadata?.preferred_username || user?.email || null);
+      setEmailOrName(user?.user_metadata?.preferred_username || user?.user_metadata?.name || "Gardener");
     });
   }, [supabase]);
 
@@ -38,7 +38,7 @@ export default function AuthButton() {
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm text-pink-100">Logged in as {emailOrName}</span>
+      <span className="text-sm text-pink-100">Logged in 🌱</span>
       <button onClick={signOut} className="rounded-full border border-white/20 px-4 py-2 text-sm">
         Logout
       </button>
